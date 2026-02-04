@@ -52,6 +52,6 @@ Route::put('/user/{user}/edit',[Usercontroller::class,'update']);
 Route::post('/logout',[Authcontroller::class,'logout']);
 });
 Route::get('/init-db', function () {
-    Artisan::call('migrate:fresh', ['--force' => true]);
+    Artisan::call('migrate', ['--force' => true]);
     return "Database initialized!";
 });
