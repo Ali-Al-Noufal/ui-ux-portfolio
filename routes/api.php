@@ -7,6 +7,7 @@ use App\Http\Controllers\api\Skillrcontroller;
 use App\Http\Controllers\api\Testemonialcontroller;
 use App\Http\Controllers\api\Usercontroller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/',[Authcontroller::class,'login']);
@@ -49,4 +50,8 @@ Route::delete('/testemonials/{id}',[Testemonialcontroller::class,'destroy']);
 Route::put('/user/{user}/edit',[Usercontroller::class,'update']);
 //..................................................
 Route::post('/logout',[Authcontroller::class,'logout']);
+});
+Route::get('/init-db', function () {
+    Artisan::call('migrate:fresh', ['--force' => true]);
+    return "Database initialized!";
 });
