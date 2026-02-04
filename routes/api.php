@@ -6,9 +6,6 @@ use App\Http\Controllers\api\Projectcontroller;
 use App\Http\Controllers\api\Skillrcontroller;
 use App\Http\Controllers\api\Testemonialcontroller;
 use App\Http\Controllers\api\Usercontroller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/',[Authcontroller::class,'login']);
