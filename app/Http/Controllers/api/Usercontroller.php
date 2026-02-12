@@ -55,22 +55,21 @@ class Usercontroller extends Controller
             'email'=>'required|email',
             'password'=>'required|min:8|confirmed',
         ]);
-        if($request->hasFile('cv')){
+        
             $cv=$request->file('cv');
             $cvname=time().".".$cv->getclientoriginalname();
-        $fileContent = file_get_contents($cv->getRealPath());
+        $fileContent2 = file_get_contents($cv->getRealPath());
 
         // إرسال الصورة إلى Vercel Blob API
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . env('BLOB_READ_WRITE_TOKEN'),
             'x-add-random-suffix' => 'true', // لإضافة رمز عشوائي يمنع تكرار الأسماء
-        ])->withBody($fileContent, $cv->getMimeType())
+        ])->withBody($fileContent2, $cv->getMimeType())
           ->put("https://blob.vercel-storage.com/" . $cvname);
             $data = $response->json();
             $cvUrl = $data['url'];
             $user->cv = $cvUrl;
-        }
-   if ($request->hasFile('image')) {
+   
         $image = $request->file('image');
         $filename = time() . '-' . $image->getClientOriginalName();
         
@@ -86,7 +85,7 @@ class Usercontroller extends Controller
             $data = $response->json();
             $imageUrl = $data['url'];
             $user->image = $imageUrl;
-            }
+            
         $user->name=strip_tags($request->name);
         $user->address=strip_tags($request->address);
         $user->yearsOfExperiance=strip_tags($request->yearsOfExperiance);
