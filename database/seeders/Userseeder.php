@@ -20,6 +20,9 @@ class Userseeder extends Seeder
             "email"=>"alinoufal@gmail.com",
             "password"=>Hash::make("123123123"),
             "phone"=>"0912345678",
+            'about_me'=>"test",
+            'yearsOfExperiance'=>"1",
+            'projectNumber'=>"4"
         ]);
     }
 }

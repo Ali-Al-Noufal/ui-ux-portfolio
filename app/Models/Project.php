@@ -12,6 +12,8 @@ class Project extends Model
         'image',
         'description',
         'url',
+        'type',
+        'features'
     ];
         public function user(){
         return $this->belongsTo(User::class);

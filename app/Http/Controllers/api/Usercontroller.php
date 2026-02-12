@@ -48,6 +48,9 @@ class Usercontroller extends Controller
         $request->validate([
             'name'=>'required|string',
             'address'=>'required|string',
+            'about_me'=>'required|text',
+            'projectNumber'=>'required|string',
+            'yearsOfExperiance'=>'required|string',
             'email'=>'required|email',
             'password'=>'required|min:8|confirmed',
         ]);
@@ -65,6 +68,9 @@ class Usercontroller extends Controller
         }
         $user->name=strip_tags($request->name);
         $user->address=strip_tags($request->address);
+        $user->yearsOfExperiance=strip_tags($request->yearsOfExperiance);
+        $user->projectNumber=strip_tags($request->projectNumber);
+        $user->about_me=strip_tags($request->about_me);
         $user->email=strip_tags($request->email);
         $user->password=strip_tags($request->password);
         $user->save();

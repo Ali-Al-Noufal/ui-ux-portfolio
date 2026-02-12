@@ -26,6 +26,8 @@ class Projectcontroller extends Controller
           'image'=>'image|required',
           'url'=>'string|required',
           'title'=>'string|required',
+          'type'=>'string|required',
+          'features'=>'string|required',
           'description'=>'string|required',
         ]);
             $image=$request->file('image');
@@ -33,11 +35,14 @@ class Projectcontroller extends Controller
             $image->move(public_path("files/images"),$imagename);
         $description=strip_tags($request->description);
         $title=strip_tags($request->title);
+        $type=strip_tags($request->type);
         $project=new Project([
             'url'=>$request->url,
+            'features'=>$request->features,
+            'description'=>$description,
             'title'=>$title,
             'image'=>$imagename,
-            'description'=>$description,
+            'type'=>$type,
         ]);
         auth()->user()->projects()->save($project);
         return response()->json(['message'=>'success']);
@@ -64,10 +69,12 @@ class Projectcontroller extends Controller
         if(empty($project)){
             return response()->json(['message'=>'project not found']);
         }
-                $request->validate([
+        $request->validate([
           'image'=>'image|required',
           'url'=>'string|required',
           'title'=>'string|required',
+          'type'=>'string|required',
+          'features'=>'string|required',
           'description'=>'string|required',
         ]);
             if($request->hasFile('image')){
@@ -79,6 +86,8 @@ class Projectcontroller extends Controller
             $project->image=$imagename;
         }
         $project->url=$request->url;
+        $project->type=$request->type;
+        $project->features=$request->features;
         $project->title=strip_tags($request->title);
         $project->description=strip_tags($request->description);
         $project->save();
