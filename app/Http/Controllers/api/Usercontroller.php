@@ -48,7 +48,7 @@ class Usercontroller extends Controller
         $request->validate([
             'name'=>'required|string',
             'address'=>'required|string',
-            'about_me'=>'required|text',
+            'about_me'=>'required|string',
             'projectNumber'=>'required|string',
             'yearsOfExperiance'=>'required|string',
             'email'=>'required|email',
