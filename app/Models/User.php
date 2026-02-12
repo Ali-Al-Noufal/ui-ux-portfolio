@@ -50,13 +50,13 @@ class User extends Authenticatable
     }
     function getImageUrlAttribute(){
         if($this->image){
-            return asset("/files/images".$this->image);
+            return $this->image;
         }
         return null;
     }
         function getcvUrlAttribute(){
         if($this->cv){
-            return asset("/files/file".$this->cv);
+            return $this->cv;
         }
         return null;
     }

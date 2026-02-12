@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class Projectcontroller extends Controller
 {
@@ -30,9 +31,20 @@ class Projectcontroller extends Controller
           'features'=>'string|required',
           'description'=>'string|required',
         ]);
-            $image=$request->file('image');
-            $imagename=time().".".$image->getclientoriginalname();
-            $image->move(public_path("files/images"),$imagename);
+        $image = $request->file('image');
+        $filename = time() . '-' . $image->getClientOriginalName();
+        
+        // قراءة محتوى الصورة
+        $fileContent = file_get_contents($image->getRealPath());
+
+        // إرسال الصورة إلى Vercel Blob API
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . env('BLOB_READ_WRITE_TOKEN'),
+            'x-add-random-suffix' => 'true', // لإضافة رمز عشوائي يمنع تكرار الأسماء
+        ])->withBody($fileContent, $image->getMimeType())
+          ->put("https://blob.vercel-storage.com/" . $filename);
+            $data = $response->json();
+            $imageUrl = $data['url']; // هذا هو الرابط الدائم للصورة
         $description=strip_tags($request->description);
         $title=strip_tags($request->title);
         $type=strip_tags($request->type);
@@ -41,7 +53,7 @@ class Projectcontroller extends Controller
             'features'=>$request->features,
             'description'=>$description,
             'title'=>$title,
-            'image'=>$imagename,
+            'image'=>$imageUrl,
             'type'=>$type,
         ]);
         auth()->user()->projects()->save($project);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class Usercontroller extends Controller
 {
@@ -57,15 +58,35 @@ class Usercontroller extends Controller
         if($request->hasFile('cv')){
             $cv=$request->file('cv');
             $cvname=time().".".$cv->getclientoriginalname();
-            $cv->move(public_path("files/file"),$cvname);
-            $user->cv=$cvname;
+        $fileContent = file_get_contents($cv->getRealPath());
+
+        // إرسال الصورة إلى Vercel Blob API
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . env('BLOB_READ_WRITE_TOKEN'),
+            'x-add-random-suffix' => 'true', // لإضافة رمز عشوائي يمنع تكرار الأسماء
+        ])->withBody($fileContent, $cv->getMimeType())
+          ->put("https://blob.vercel-storage.com/" . $cvname);
+            $data = $response->json();
+            $cvUrl = $data['url'];
+            $user->cv = $cvUrl;
         }
-            if($request->hasFile('image')){
-            $image=$request->file('image');
-            $imagename=time().".".$image->getclientoriginalname();
-            $image->move(public_path("files/images"),$imagename);
-            $user->image=$imagename;
-        }
+   if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $filename = time() . '-' . $image->getClientOriginalName();
+        
+        // قراءة محتوى الصورة
+        $fileContent = file_get_contents($image->getRealPath());
+
+        // إرسال الصورة إلى Vercel Blob API
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . env('BLOB_READ_WRITE_TOKEN'),
+            'x-add-random-suffix' => 'true', // لإضافة رمز عشوائي يمنع تكرار الأسماء
+        ])->withBody($fileContent, $image->getMimeType())
+          ->put("https://blob.vercel-storage.com/" . $filename);
+            $data = $response->json();
+            $imageUrl = $data['url'];
+            $user->image = $imageUrl;
+            }
         $user->name=strip_tags($request->name);
         $user->address=strip_tags($request->address);
         $user->yearsOfExperiance=strip_tags($request->yearsOfExperiance);
