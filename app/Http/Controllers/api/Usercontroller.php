@@ -50,6 +50,8 @@ class Usercontroller extends Controller
             'name'=>'required|string',
             'address'=>'required|string',
             'about_me'=>'required|string',
+            'image'=>'required|image',
+            'cv'=>'required|file',
             'projectNumber'=>'required|string',
             'yearsOfExperiance'=>'required|string',
             'email'=>'required|email',
