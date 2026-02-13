@@ -9,7 +9,8 @@ class Message extends Model
 {
     protected $fillable = [
         'name',
-        'title',
+        'email',
+        'phone',
         'content',
     ];
         public function user(){

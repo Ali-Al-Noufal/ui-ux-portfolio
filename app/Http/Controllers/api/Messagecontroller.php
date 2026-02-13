@@ -26,7 +26,8 @@ class Messagecontroller extends Controller
     {
         $request->validate([
           'name'=>'string|required',
-          'title'=>'string|required',
+          'email'=>'email|required',
+          'phone'=>'string|required',
           'content'=>'string|required',
         ]);
         $user=User::find($id);
@@ -36,7 +37,8 @@ class Messagecontroller extends Controller
         $message=new Message;
         $message->name=strip_tags($request->name);
         $message->content=strip_tags($request->content);
-        $message->title=strip_tags($request->title);
+        $message->phone=strip_tags($request->phone);
+        $message->email=$request->email;
         $user->messages()->save($message);
         return response()->json(['message'=>'success']);
     }
