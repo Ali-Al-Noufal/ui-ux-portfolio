@@ -50,15 +50,14 @@ class Usercontroller extends Controller
             'name'=>'required|string',
             'address'=>'required|string',
             'about_me'=>'required|string',
-            'image'=>'required|image',
-            'cv'=>'required|file',
             'projectNumber'=>'required|string',
             'yearsOfExperiance'=>'required|string',
             'email'=>'required|email',
             'password'=>'required|min:8|confirmed',
         ]);
         
-            $cv=$request->file('cv');
+        if($request->hasFile('cv')){
+                        $cv=$request->file('cv');
             $cvname=time().".".$cv->getclientoriginalname();
         $fileContent2 = file_get_contents($cv->getRealPath());
 
@@ -72,7 +71,9 @@ class Usercontroller extends Controller
             $cvUrl = $data['url'];
             $user->cv = $cvUrl;
    
-        $image = $request->file('image');
+        }
+        if($request->hasFile('image')){
+                    $image = $request->file('image');
         $filename = time() . '-' . $image->getClientOriginalName();
         
         // قراءة محتوى الصورة
@@ -87,6 +88,7 @@ class Usercontroller extends Controller
             $data = $response->json();
             $imageUrl = $data['url'];
             $user->image = $imageUrl;
+        }
             
         $user->name=strip_tags($request->name);
         $user->address=strip_tags($request->address);
