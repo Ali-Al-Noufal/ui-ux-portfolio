@@ -21,7 +21,7 @@ return [
 
 // أضف رابط الـ React الخاص بك هنا بدقة
 'allowed_origins' => [
-    'https://alaamohammad-yf2udjy3d-alis-projects-a74f2b72.vercel.app',
+    'https://alaamohammad.vercel.app',
 ],
 
 'allowed_origins_patterns' => [],
